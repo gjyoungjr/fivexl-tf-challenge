@@ -1,4 +1,3 @@
-# main.tf
 # Main configuration file - provider setup and local values
 
 # Configure the AWS Provider

@@ -1,6 +1,3 @@
-# versions.tf
-# This file pins Terraform and provider versions for consistency across environments
-
 terraform {
   required_version = ">= 1.10.0"
 

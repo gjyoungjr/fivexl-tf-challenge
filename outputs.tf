@@ -1,7 +1,3 @@
-# outputs.tf
-# Output values shown after terraform apply
-# We'll add more outputs as we create resources
-
 output "environment" {
   description = "Current environment"
   value       = var.environment
