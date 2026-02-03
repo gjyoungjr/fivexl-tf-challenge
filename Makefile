@@ -34,7 +34,7 @@ whoami: ## Show current AWS identity
 	@AWS_PROFILE=$(AWS_PROFILE) aws sts get-caller-identity
 
 tf-init: ## Initialize Terraform
-	$(TERRAFORM) init
+	$(TERRAFORM) init -migrate-state
 
 tf-plan: ## Run Terraform plan
 	$(TERRAFORM) plan -var-file=$(TF_VARS_FILE)
