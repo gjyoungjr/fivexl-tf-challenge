@@ -27,3 +27,9 @@ output "terraform_locks_table" {
   description = "DynamoDB table for Terraform state locking"
   value       = aws_dynamodb_table.terraform_locks.name
 }
+
+# Website outputs
+output "website_url" {
+  description = "URL of the static website"
+  value       = aws_s3_bucket_website_configuration.website.website_endpoint
+}
