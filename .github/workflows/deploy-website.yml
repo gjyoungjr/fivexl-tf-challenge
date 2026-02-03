@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'website/**'     # Only trigger when website files change
+      - '*.tf'           # Also trigger on Terraform changes
 
   # Allow manual trigger from GitHub UI
   workflow_dispatch:
@@ -16,7 +17,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy to S3
+    name: Deploy Website
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +42,8 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -var-file=${{ env.TF_VAR_FILE }} -auto-approve
 
-      - name: Output Website URL
+      - name: Output Deployment Info
         run: |
           echo "Website deployed!"
-          terraform output website_url || echo "Check your S3 bucket for the website URL"
+          echo "Hosting type: $(terraform output -raw hosting_type)"
+          echo "Website URL: $(terraform output -raw website_url)"

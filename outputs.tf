@@ -29,7 +29,33 @@ output "terraform_locks_table" {
 }
 
 # Website outputs
+output "hosting_type" {
+  description = "Current hosting type (s3 or ec2)"
+  value       = var.hosting_type
+}
+
 output "website_url" {
   description = "URL of the static website"
-  value       = aws_s3_bucket_website_configuration.website.website_endpoint
+  value = var.hosting_type == "s3" ? (
+    length(aws_s3_bucket_website_configuration.website) > 0 ? "http://${aws_s3_bucket_website_configuration.website[0].website_endpoint}" : null
+    ) : (
+    length(aws_instance.web) > 0 ? "http://${aws_instance.web[0].public_ip}" : null
+  )
+}
+
+# EC2-specific outputs (only populated when hosting_type = "ec2")
+output "ec2_instance_id" {
+  description = "EC2 instance ID (only when hosting_type = 'ec2')"
+  value       = length(aws_instance.web) > 0 ? aws_instance.web[0].id : null
+}
+
+output "ec2_public_ip" {
+  description = "EC2 public IP address (only when hosting_type = 'ec2')"
+  value       = length(aws_instance.web) > 0 ? aws_instance.web[0].public_ip : null
+}
+
+# S3-specific outputs (only populated when hosting_type = "s3")
+output "website_bucket" {
+  description = "S3 bucket name (only when hosting_type = 's3')"
+  value       = length(aws_s3_bucket.website) > 0 ? aws_s3_bucket.website[0].bucket : null
 }
