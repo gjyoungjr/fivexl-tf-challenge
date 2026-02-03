@@ -10,7 +10,7 @@ hosting_type = "ec2"
 
 # EC2 settings (only used when hosting_type = "ec2")
 ec2_instance_type = "t3.micro"
-ec2_key_name      = "dev-keypair"  # SSH key for EC2 access
+# ec2_key_name      = "dev-keypair"  # Uncomment if you need SSH access
 
 tags = {
   CostCenter = "development"
