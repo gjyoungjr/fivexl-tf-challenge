@@ -21,7 +21,7 @@ variable "aws_region" {
 variable "hosting_type" {
   description = "Where to host the website: 's3' for S3 static hosting or 'ec2' for EC2 instance with nginx"
   type        = string
-  default     = "ec2"
+  default     = "s3"
 
   validation {
     condition     = contains(["s3", "ec2"], var.hosting_type)
