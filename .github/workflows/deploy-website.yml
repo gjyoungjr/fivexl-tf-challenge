@@ -1,0 +1,48 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+      - website-hosting  # Include your current branch
+    paths:
+      - 'website/**'     # Only trigger when website files change
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  TF_VAR_FILE: environments/dev.tfvars
+
+jobs:
+  deploy:
+    name: Deploy to S3
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -var-file=${{ env.TF_VAR_FILE }} -auto-approve
+
+      - name: Output Website URL
+        run: |
+          echo "Website deployed!"
+          terraform output website_url || echo "Check your S3 bucket for the website URL"
