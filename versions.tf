@@ -11,10 +11,11 @@ terraform {
     }
   }
 
+  # Partial backend configuration - actual values passed via:
+  #   terraform init -backend-config=environments/backend-<env>.hcl
+  # This enables separate state files per environment/account
   backend "s3" {
-    bucket       = "fivexl-challenge-dev-terraform-state"
-    key          = "terraform.tfstate"
-    region       = "us-east-1"
+    # bucket, key, region provided via -backend-config
     use_lockfile = true
     encrypt      = true
   }

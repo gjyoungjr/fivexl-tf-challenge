@@ -35,6 +35,12 @@ variable "ec2_instance_type" {
   default     = "t3.micro"
 }
 
+variable "ec2_key_name" {
+  description = "Name of the SSH key pair for EC2 access (only used when hosting_type = 'ec2')"
+  type        = string
+  default     = null
+}
+
 # Tags applied to all resources for organization and cost tracking
 variable "tags" {
   description = "Tags to apply to all resources"
