@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix-ec2-hosting-ci
     paths:
       - 'website/**'     # Only trigger when website files change
       - '*.tf'           # Also trigger on Terraform changes
