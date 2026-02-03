@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - website-hosting  # Include your current branch
     paths:
       - 'website/**'     # Only trigger when website files change
 
