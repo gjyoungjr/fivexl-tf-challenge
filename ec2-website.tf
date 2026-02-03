@@ -75,6 +75,7 @@ resource "aws_instance" "web" {
   count                       = local.use_ec2 ? 1 : 0
   ami                         = data.aws_ami.amazon_linux[0].id
   instance_type               = var.ec2_instance_type
+  key_name                    = var.ec2_key_name
   vpc_security_group_ids      = [aws_security_group.web[0].id]
   associate_public_ip_address = true
 
@@ -111,4 +112,21 @@ resource "aws_instance" "web" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+# Elastic IP for stable endpoint (persists across instance replacements)
+resource "aws_eip" "web" {
+  count  = local.use_ec2 ? 1 : 0
+  domain = "vpc"
+
+  tags = {
+    Name = "${local.name_prefix}-web-eip"
+  }
+}
+
+# Associate EIP with EC2 instance
+resource "aws_eip_association" "web" {
+  count         = local.use_ec2 ? 1 : 0
+  instance_id   = aws_instance.web[0].id
+  allocation_id = aws_eip.web[0].id
 }

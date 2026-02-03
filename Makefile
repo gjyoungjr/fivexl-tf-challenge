@@ -15,6 +15,7 @@ HOSTING ?=
 # VARIABLES
 # ============================================
 TF_VARS_FILE = environments/$(ENV).tfvars
+TF_BACKEND_FILE = environments/backend-$(ENV).hcl
 TERRAFORM = AWS_PROFILE=$(AWS_PROFILE) AWS_REGION=$(AWS_REGION) terraform
 
 # Build extra vars if HOSTING is specified
@@ -44,8 +45,11 @@ help: ## Show this help message
 whoami: ## Show current AWS identity
 	@AWS_PROFILE=$(AWS_PROFILE) aws sts get-caller-identity
 
-tf-init: ## Initialize Terraform
-	$(TERRAFORM) init
+tf-init: ## Initialize Terraform with environment-specific backend
+	$(TERRAFORM) init -backend-config=$(TF_BACKEND_FILE)
+
+tf-init-reconfigure: ## Reinitialize Terraform (switch environments)
+	$(TERRAFORM) init -backend-config=$(TF_BACKEND_FILE) -reconfigure
 
 tf-plan: ## Run Terraform plan (HOSTING=s3|ec2)
 	$(TERRAFORM) plan -var-file=$(TF_VARS_FILE) $(TF_EXTRA_VARS)

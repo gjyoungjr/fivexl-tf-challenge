@@ -39,7 +39,7 @@ output "website_url" {
   value = var.hosting_type == "s3" ? (
     length(aws_s3_bucket_website_configuration.website) > 0 ? "http://${aws_s3_bucket_website_configuration.website[0].website_endpoint}" : null
     ) : (
-    length(aws_instance.web) > 0 ? "http://${aws_instance.web[0].public_ip}" : null
+    length(aws_eip.web) > 0 ? "http://${aws_eip.web[0].public_ip}" : null
   )
 }
 
@@ -50,8 +50,8 @@ output "ec2_instance_id" {
 }
 
 output "ec2_public_ip" {
-  description = "EC2 public IP address (only when hosting_type = 'ec2')"
-  value       = length(aws_instance.web) > 0 ? aws_instance.web[0].public_ip : null
+  description = "EC2 Elastic IP address - stable across redeployments (only when hosting_type = 'ec2')"
+  value       = length(aws_eip.web) > 0 ? aws_eip.web[0].public_ip : null
 }
 
 # S3-specific outputs (only populated when hosting_type = "s3")

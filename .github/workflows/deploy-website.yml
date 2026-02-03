@@ -13,7 +13,8 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  TF_VAR_FILE: environments/dev.tfvars
+  # Environment can be overridden via workflow_dispatch input
+  ENVIRONMENT: dev
 
 jobs:
   deploy:
@@ -37,13 +38,14 @@ jobs:
           terraform_version: 1.10.0
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config=environments/backend-${{ env.ENVIRONMENT }}.hcl
 
       - name: Terraform Apply
-        run: terraform apply -var-file=${{ env.TF_VAR_FILE }} -auto-approve
+        run: terraform apply -var-file=environments/${{ env.ENVIRONMENT }}.tfvars -auto-approve
 
       - name: Output Deployment Info
         run: |
           echo "Website deployed!"
+          echo "Environment: ${{ env.ENVIRONMENT }}"
           echo "Hosting type: $(terraform output -raw hosting_type)"
           echo "Website URL: $(terraform output -raw website_url)"
