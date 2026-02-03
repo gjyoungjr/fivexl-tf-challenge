@@ -1,7 +1,3 @@
-# state-bucket.tf
-# S3 bucket and DynamoDB table for Terraform remote state storage
-
-# S3 bucket for storing Terraform state
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "${local.name_prefix}-terraform-state"
 

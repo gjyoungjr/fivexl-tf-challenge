@@ -1,6 +1,3 @@
-# ec2-website.tf
-# EC2-based website hosting (conditional on hosting_type)
-
 locals {
   use_ec2 = var.hosting_type == "ec2"
 

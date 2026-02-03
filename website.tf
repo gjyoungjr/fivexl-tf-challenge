@@ -1,6 +1,3 @@
-# website.tf
-# S3 static website hosting (conditional on hosting_type)
-
 locals {
   use_s3 = var.hosting_type == "s3"
 }

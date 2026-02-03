@@ -1,6 +1,3 @@
-# variables.tf
-# Input variables allow customization between environments (dev/prod)
-
 variable "environment" {
   description = "Environment name (e.g., dev, prod)"
   type        = string
